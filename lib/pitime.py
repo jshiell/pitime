@@ -74,6 +74,7 @@ class PiTime:
             Clock(font_manager, sprite_factory, font_size=172, x=50, y=50)
         ]
 
+        sdl2.SDL_ShowCursor(sdl2.SDL_DISABLE)
         window.show()
 
         running = True
