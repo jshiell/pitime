@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import threading
 import time
+import time
 from sdl2.ext import init, Resources, Color, SpriteFactory
 import sdl2
 from sdl2.sdlttf import *
@@ -130,6 +131,8 @@ class CurrentWeather:
 class PiTime:
 
     UPDATE_PERIOD = 60
+    FPS = 5
+    FRAME_BUDGET = 1000 / FPS
 
     def __init__(self, fullscreen=False, weather_api_key=None, weather_latitude=0.0, weather_longitude=0.0):
         self.fullscreen = fullscreen
@@ -176,6 +179,8 @@ class PiTime:
         running = True
 
         while (running):
+            time_start_ms = ms = time.time_ns() // 1_000_000 
+
             events = sdl2.ext.get_events()
             for event in events:
                 if event.type == sdl2.SDL_QUIT:
@@ -188,7 +193,13 @@ class PiTime:
             renderer.clear(Colour.BLACK)
             for entity in entities:
                 entity.render(renderer)
+
             renderer.present()
+
+            time_elapsed_ms = (time.time_ns() // 1_000_000) - time_start_ms
+            remaining_budget = self.FRAME_BUDGET - time_elapsed_ms
+            if remaining_budget > 0:
+                time.sleep(remaining_budget / 1000)
 
         font_manager.close()
 
