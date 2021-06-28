@@ -8,9 +8,13 @@ class WeatherUpdater:
         self.latitude = latitude
         self.longitude = longitude
         self.current_temp = 0.0
+        self.current_condition_id = 800
 
     def temperature(self):
         return self.current_temp
+
+    def condition_id(self):
+        return self.current_condition_id
 
     def update(self):
         if self.api_key is None:
@@ -31,3 +35,4 @@ class WeatherUpdater:
         weather = weather_response.json()
 
         self.current_temp = weather['current']['temp']
+        self.current_condition_id = weather['current']['weather'][0]['id']

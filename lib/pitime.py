@@ -53,33 +53,78 @@ class Clock:
 
 class CurrentWeather:
 
-    def __init__(self, weather_updater, font_manager, sprite_factory, font_size=32, font_colour=Colour.WHITE, font_name=None, x=10, y=10):
+    def __init__(self, weather_updater, font_manager, sprite_factory, font_size=80, font_colour=Colour.WHITE, font_name=None,
+                 weather_font_size=60, weather_font_name="weather", x=10, y=10):
         self.weather_updater = weather_updater
         self.font_manager = font_manager
         self.sprite_factory = sprite_factory
         self.font_size = font_size
         self.font_colour = font_colour
         self.font_name = font_name
+        self.weather_font_size = weather_font_size
+        self.weather_font_name = weather_font_name
         self.x = x
         self.y = y
 
-        self.text = ''
-        self.sprite = None
+        self.text_temp = ''
+        self.text_condition = ''
+        self.sprite_temp = None
+        self.sprite_condition = None
         self.last_temp = None
+        self.last_condition = None
 
     def update(self):
         current_temp = self.weather_updater.temperature()
         if self.last_temp != current_temp:
             self.last_temp = current_temp
-            self.text = '%s°' % round(current_temp, 1)
-            self.sprite = None
+            self.text_temp = '%s°' % round(current_temp, 1)
+            self.sprite_temp = None
+
+        current_condition = self.weather_updater.condition_id()
+        if self.last_condition != current_condition:
+            self.last_condition = current_condition
+            self.text_condition = self.text_for_weather_condition_id(current_condition)
+            self.sprite_condition = None
+
+    def text_for_weather_condition_id(self, condition_id):
+        # https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+        # https://erikflowers.github.io/weather-icons/
+        if condition_id >= 200 and condition_id < 300: # thunderstorm
+            return "\uf01e"
+        elif condition_id >= 300 and condition_id < 400: # drizzle
+            return "\uf01a"
+        elif condition_id >= 500 and condition_id < 600: # rain
+            return "\uf019"
+        elif condition_id >= 600 and condition_id < 700: # snow
+            return "\uf01b"
+        elif condition_id >= 700 and condition_id < 800: # atmospheric effects
+            if condition_id == 741:
+                return "\uf014"
+            elif condition_id == 781:
+                return "\uf056"
+            else:
+                return "\uf062"
+        elif condition_id == 800: # clear
+            return "\uf00d"
+        elif condition_id >= 801 and condition_id < 900: # clouds
+            if condition_id > 802:
+                return "\uf013"
+            else:
+                return "\uf002"
+        else:
+            return "\uf07b"
 
     def render(self, renderer):
-        if self.sprite is None:
-            text_surface = self.font_manager.render(self.text, size=self.font_size, color=self.font_colour, alias=self.font_name)
-            self.sprite = self.sprite_factory.from_surface(text_surface, free=True)
+        if self.sprite_temp is None:
+            temp_text_surface = self.font_manager.render(self.text_temp, size=self.font_size, color=self.font_colour, alias=self.font_name)
+            self.sprite_temp = self.sprite_factory.from_surface(temp_text_surface, free=True)
 
-        renderer.copy(self.sprite, dstrect=(self.x, self.y, self.sprite.size[0], self.sprite.size[1]))
+        if self.sprite_condition is None:
+            condition_text_surface = self.font_manager.render(self.text_condition, size=self.weather_font_size, color=self.font_colour, alias=self.weather_font_name)
+            self.sprite_condition = self.sprite_factory.from_surface(condition_text_surface, free=True)
+
+        renderer.copy(self.sprite_temp, dstrect=(self.x, self.y, self.sprite_temp.size[0], self.sprite_temp.size[1]))
+        renderer.copy(self.sprite_condition, dstrect=(self.x, self.y + 80, self.sprite_condition.size[0], self.sprite_condition.size[1]))
 
 
 class PiTime:
@@ -113,6 +158,7 @@ class PiTime:
         font_path = resources.get_path("Roboto-Medium.ttf")
         font_manager = sdl2.ext.FontManager(font_path, alias="roboto-medium")
         font_manager.add(resources.get_path("LandasansUltraLight.otf"), alias="landasans-ultralight")
+        font_manager.add(resources.get_path("weathericons-regular-webfont.ttf"), alias="weather")
 
         renderer = sdl2.ext.Renderer(window)
         renderer.clear(Colour.WHITE)
