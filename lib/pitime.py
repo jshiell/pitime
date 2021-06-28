@@ -39,7 +39,7 @@ class Clock:
     def update(self):
         now = datetime.now()
         if self.last_second != now.second:
-            self.text = now.strftime("%H:%M:%S")
+            self.text = now.strftime("%H:%M")
             self.last_second = now.second
             self.sprite = None
 
@@ -161,12 +161,12 @@ class PiTime:
         font_manager.add(resources.get_path("weathericons-regular-webfont.ttf"), alias="weather")
 
         renderer = sdl2.ext.Renderer(window)
-        renderer.clear(Colour.WHITE)
+        renderer.clear(Colour.BLACK)
 
         sprite_factory = SpriteFactory(sprite_type=sdl2.ext.TEXTURE, renderer=renderer)
 
         entities = [
-            Clock(font_manager, sprite_factory, font_size=260, font_name="landasans-ultralight", x=110, y=50),
+            Clock(font_manager, sprite_factory, font_size=400, font_name="landasans-ultralight", x=110, y=50),
             CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=80, font_name="landasans-ultralight", x=630, y=105)
         ]
 
