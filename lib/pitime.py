@@ -23,11 +23,12 @@ class Colour:
 
 class Clock:
 
-    def __init__(self, font_manager, sprite_factory, font_size=32, font_colour=Colour.WHITE, x=10, y=10):
+    def __init__(self, font_manager, sprite_factory, font_size=32, font_colour=Colour.WHITE, font_name=None, x=10, y=10):
         self.font_manager = font_manager
         self.sprite_factory = sprite_factory
         self.font_size = font_size
         self.font_colour = font_colour
+        self.font_name = font_name
         self.x = x
         self.y = y
 
@@ -44,7 +45,7 @@ class Clock:
 
     def render(self, renderer):
         if self.sprite is None:
-            text_surface = self.font_manager.render(self.text, size=self.font_size, color=self.font_colour)
+            text_surface = self.font_manager.render(self.text, size=self.font_size, color=self.font_colour, alias=self.font_name)
             self.sprite = self.sprite_factory.from_surface(text_surface, free=True)
 
         renderer.copy(self.sprite, dstrect=(self.x, self.y, self.sprite.size[0], self.sprite.size[1]))
@@ -52,12 +53,13 @@ class Clock:
 
 class CurrentWeather:
 
-    def __init__(self, weather_updater, font_manager, sprite_factory, font_size=32, font_colour=Colour.WHITE, x=10, y=10):
+    def __init__(self, weather_updater, font_manager, sprite_factory, font_size=32, font_colour=Colour.WHITE, font_name=None, x=10, y=10):
         self.weather_updater = weather_updater
         self.font_manager = font_manager
         self.sprite_factory = sprite_factory
         self.font_size = font_size
         self.font_colour = font_colour
+        self.font_name = font_name
         self.x = x
         self.y = y
 
@@ -74,7 +76,7 @@ class CurrentWeather:
 
     def render(self, renderer):
         if self.sprite is None:
-            text_surface = self.font_manager.render(self.text, size=self.font_size, color=self.font_colour)
+            text_surface = self.font_manager.render(self.text, size=self.font_size, color=self.font_colour, alias=self.font_name)
             self.sprite = self.sprite_factory.from_surface(text_surface, free=True)
 
         renderer.copy(self.sprite, dstrect=(self.x, self.y, self.sprite.size[0], self.sprite.size[1]))
@@ -110,6 +112,7 @@ class PiTime:
 
         font_path = resources.get_path("Roboto-Medium.ttf")
         font_manager = sdl2.ext.FontManager(font_path, alias="roboto-medium")
+        font_manager.add(resources.get_path("LandasansUltraLight.otf"), alias="landasans-ultralight")
 
         renderer = sdl2.ext.Renderer(window)
         renderer.clear(Colour.WHITE)
@@ -117,8 +120,8 @@ class PiTime:
         sprite_factory = SpriteFactory(sprite_type=sdl2.ext.TEXTURE, renderer=renderer)
 
         entities = [
-            Clock(font_manager, sprite_factory, font_size=172, x=50, y=50),
-            CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=64, x=10, y=SCREEN_HEIGHT-80)
+            Clock(font_manager, sprite_factory, font_size=260, font_name="landasans-ultralight", x=110, y=50),
+            CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=80, font_name="landasans-ultralight", x=630, y=70)
         ]
 
         sdl2.SDL_ShowCursor(sdl2.SDL_DISABLE)
