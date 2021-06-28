@@ -11,8 +11,11 @@ def main(args):
     weather_latitude = float(os.environ.get('WEATHER_LATITUDE', 51.752239))
     weather_longitude = float(os.environ.get('WEATHER_LONGITUDE', -0.338650))
 
-    if '--fullscreen' in args:
-        fullscreen = True
+    for arg in args:
+        if arg == "--fullscreen":
+            fullscreen = True
+        elif arg.startswith("--weather-api-key"):
+            weather_api_key = arg[len("--weather-api-key="):]
 
     return PiTime(fullscreen=fullscreen,
                   weather_api_key=weather_api_key,
