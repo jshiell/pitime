@@ -124,7 +124,7 @@ class CurrentWeather:
             self.sprite_condition = self.sprite_factory.from_surface(condition_text_surface, free=True)
 
         renderer.copy(self.sprite_temp, dstrect=(self.x, self.y, self.sprite_temp.size[0], self.sprite_temp.size[1]))
-        renderer.copy(self.sprite_condition, dstrect=(self.x, self.y + 80, self.sprite_condition.size[0], self.sprite_condition.size[1]))
+        renderer.copy(self.sprite_condition, dstrect=(self.x, self.y + 100, self.sprite_condition.size[0], self.sprite_condition.size[1]))
 
 
 class PiTime:
@@ -167,7 +167,7 @@ class PiTime:
 
         entities = [
             Clock(font_manager, sprite_factory, font_size=260, font_name="landasans-ultralight", x=110, y=50),
-            CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=80, font_name="landasans-ultralight", x=630, y=70)
+            CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=80, font_name="landasans-ultralight", x=630, y=105)
         ]
 
         sdl2.SDL_ShowCursor(sdl2.SDL_DISABLE)
