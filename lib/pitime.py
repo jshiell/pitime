@@ -179,7 +179,7 @@ class PiTime:
         running = True
 
         while (running):
-            time_start_ms = ms = time.time_ns() // 1_000_000 
+            time_start_ms = self.current_timestamp_ms()
 
             events = sdl2.ext.get_events()
             for event in events:
@@ -196,7 +196,7 @@ class PiTime:
 
             renderer.present()
 
-            time_elapsed_ms = (time.time_ns() // 1_000_000) - time_start_ms
+            time_elapsed_ms = self.current_timestamp_ms() - time_start_ms
             remaining_budget = self.FRAME_BUDGET - time_elapsed_ms
             if remaining_budget > 0:
                 time.sleep(remaining_budget / 1000)
@@ -204,3 +204,6 @@ class PiTime:
         font_manager.close()
 
         return 0
+
+    def current_timestamp_ms(self):
+        return time.time_ns() // 1_000_000
