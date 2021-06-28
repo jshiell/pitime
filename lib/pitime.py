@@ -166,8 +166,8 @@ class PiTime:
         sprite_factory = SpriteFactory(sprite_type=sdl2.ext.TEXTURE, renderer=renderer)
 
         entities = [
-            Clock(font_manager, sprite_factory, font_size=400, font_name="landasans-ultralight", x=110, y=50),
-            CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=80, font_name="landasans-ultralight", x=630, y=105)
+            Clock(font_manager, sprite_factory, font_size=400, font_name="landasans-ultralight", x=110, y=-20),
+            CurrentWeather(self.weather_updater, font_manager, sprite_factory, font_size=80, font_name="landasans-ultralight", x=630, y=80)
         ]
 
         sdl2.SDL_ShowCursor(sdl2.SDL_DISABLE)
