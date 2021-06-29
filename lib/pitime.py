@@ -50,6 +50,7 @@ class Clock:
             text_surface = self.font_manager.render(self.text, size=self.font_size, color=self.font_colour, alias=self.font_name)
             self.sprite = self.sprite_factory.from_surface(text_surface, free=True)
 
+        # libsdl2-ttf/freetype on the Pi renders a lot of blank space above the text, makes positioning different than mac
         renderer.copy(self.sprite, dstrect=(self.x, self.y, self.sprite.size[0], self.sprite.size[1]))
 
 
