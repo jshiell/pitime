@@ -130,7 +130,7 @@ class CurrentWeather:
 
 class PiTime:
 
-    UPDATE_PERIOD = 60
+    WEATHER_UPDATE_PERIOD = 600
     FPS = 5
     FRAME_BUDGET = 1000 / FPS
 
@@ -142,7 +142,7 @@ class PiTime:
     def run_background_updates(self):
         self.weather_updater.update()
 
-        time.sleep(self.UPDATE_PERIOD)
+        time.sleep(self.WEATHER_UPDATE_PERIOD)
 
     def run(self):
         init()
