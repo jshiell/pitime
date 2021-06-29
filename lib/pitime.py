@@ -141,12 +141,13 @@ class PiTime:
         self.weather_updater = WeatherUpdater(weather_api_key, weather_latitude, weather_longitude)
 
     def run_background_updates(self):
-        try:
-            self.weather_updater.update()
-        except Exception as e:
-            print(e, file=sys.stderr)
+        while True:
+            try:
+                self.weather_updater.update()
+            except Exception as e:
+                print(e, file=sys.stderr)
 
-        time.sleep(self.WEATHER_UPDATE_PERIOD)
+            time.sleep(self.WEATHER_UPDATE_PERIOD)
 
     def run(self):
         init()
