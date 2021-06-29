@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import os
+import sys
 from datetime import datetime
 import threading
 import time
@@ -140,7 +141,10 @@ class PiTime:
         self.weather_updater = WeatherUpdater(weather_api_key, weather_latitude, weather_longitude)
 
     def run_background_updates(self):
-        self.weather_updater.update()
+        try:
+            self.weather_updater.update()
+        except Exception as e:
+            print(e, file=sys.stderr)
 
         time.sleep(self.WEATHER_UPDATE_PERIOD)
 

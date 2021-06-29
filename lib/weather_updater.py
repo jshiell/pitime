@@ -8,7 +8,7 @@ class WeatherUpdater:
         self.latitude = latitude
         self.longitude = longitude
         self.current_temp = 0.0
-        self.current_condition_id = 800
+        self.current_condition_id = 0
 
     def temperature(self):
         return self.current_temp
