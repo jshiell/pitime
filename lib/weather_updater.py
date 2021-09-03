@@ -23,7 +23,7 @@ class WeatherUpdater:
         weather_response = requests.get('https://api.openweathermap.org/data/2.5/onecall',
                                         params={
                                             'lat': self.latitude,
-                                            'lon': -0.338650,
+                                            'lon': self.longitude,
                                             'units': 'metric',
                                             'lang': 'en',
                                             'exclude': 'minutely,hourly,daily,alerts',
